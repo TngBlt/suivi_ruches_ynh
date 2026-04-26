@@ -7,7 +7,7 @@ name = "Suivi Ruches"
 description.en = "Beekeeping monitoring app with AI assistant and voice dictation"
 description.fr = "Application de suivi apicole avec assistant IA et dictée vocale"
 
-version = "1.4.0~ynh1"
+version = "1.4.0~ynh2"
 
 maintainers = ["TngBlt"]
 
@@ -58,7 +58,7 @@ ram.runtime = "150M"
     # The sources will be the local archive built from the suivi-ruches repository
     # For now, we use the GitHub repo as source
     url = "https://github.com/TngBlt/suivi-ruches/archive/refs/heads/main.tar.gz"
-    sha256 = "d55ecc78c421522b1fbbdaf079b23fe80dd459fc550afdecffa036db8bcbb10a"
+    sha256 = "aa2fa72eeaa88db3df2584c16403e8648f872e7bfbefc165de1fbabdb985147f"
     in_subdir = true
     
     autoupdate.strategy = "latest_github_commit"
