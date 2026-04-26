@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
+ynh_script_progression "Restoring the app main directory..."
+
+ynh_restore "$install_dir"
+
+chown -R "$app:www-data" "$install_dir"
+chmod 600 "$install_dir/.env"
+chown "$app:$app" "$install_dir/.env"
+
+#=================================================
+# REINSTALL NODE.JS
+#=================================================
+ynh_script_progression "Reinstalling Node.js..."
+
+ynh_nodejs_install
+
+#=================================================
+# REINSTALL NPM DEPENDENCIES
+#=================================================
+ynh_script_progression "Reinstalling app dependencies..."
+
+pushd "$install_dir"
+    ynh_exec_as_app $ynh_node_load_PATH $ynh_npm install --production
+popd
+
+#=================================================
+# RESTORE SYSTEM CONFIGURATIONS
+#=================================================
+ynh_script_progression "Restoring system configurations..."
+
+# Restore NGINX config
+ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
+
+# Restore systemd service
+ynh_restore "/etc/systemd/system/$app.service"
+systemctl enable "$app.service" --quiet
+systemctl daemon-reload
+
+# Restore logrotate config
+ynh_restore "/etc/logrotate.d/$app"
+
+# Restore log directory
+ynh_restore "/var/log/$app"
+
+# Re-register the service in Yunohost
+yunohost service add "$app" --description="Suivi Ruches - Beekeeping monitoring app" --log="/var/log/$app/$app.log"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting $app's systemd service..."
+
+ynh_systemctl --service="$app" --action="start" --log_path="/var/log/$app/$app.log" --wait_until="🐝 Apiculture App disponible"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+ynh_systemctl --service=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression "Restoration of $app completed"

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Stopping $app's systemd service..."
+
+ynh_systemctl --service="$app" --action="stop" --log_path="/var/log/$app/$app.log"
+
+#=================================================
+# MODIFY URL IN NGINX CONFIG
+#=================================================
+ynh_script_progression "Updating NGINX web server configuration..."
+
+# Re-add NGINX config with new URL
+ynh_config_change_url_nginx
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting $app's systemd service..."
+
+ynh_systemctl --service="$app" --action="start" --log_path="/var/log/$app/$app.log" --wait_until="🐝 Apiculture App disponible"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression "Change of URL completed for $app"

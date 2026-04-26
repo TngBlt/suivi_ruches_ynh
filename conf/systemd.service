@@ -1,0 +1,41 @@
+[Unit]
+Description=Suivi Ruches - Beekeeping monitoring app
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__/src/
+EnvironmentFile=__INSTALL_DIR__/.env
+ExecStart=__NODEJS_DIR__/node __INSTALL_DIR__/src/server.js
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Environment
+Environment="NODE_ENV=production"
+Environment="PORT=__PORT__"
+Environment="PATH=__PATH_WITH_NODEJS__"
+
+# Standard output and error
+StandardOutput=append:/var/log/__APP__/__APP__.log
+StandardError=append:/var/log/__APP__/__APP__.log
+
+# Sandboxing options (security hardening)
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ReadWritePaths=__INSTALL_DIR__ /var/log/__APP__
+
+# Capabilities
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

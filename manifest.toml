@@ -1,0 +1,83 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "suivi_ruches"
+name = "Suivi Ruches"
+description.en = "Beekeeping monitoring app with AI assistant and voice dictation"
+description.fr = "Application de suivi apicole avec assistant IA et dictée vocale"
+
+version = "1.4.0~ynh1"
+
+maintainers = ["TngBlt"]
+
+[upstream]
+license = "MIT"
+website = "https://github.com/TngBlt/suivi-ruches"
+demo = "https://github.com/TngBlt/suivi-ruches"
+admindoc = "https://github.com/TngBlt/suivi-ruches/blob/main/README.md"
+userdoc = "https://github.com/TngBlt/suivi-ruches/blob/main/GUIDE_V1.4.md"
+code = "https://github.com/TngBlt/suivi-ruches"
+
+[integration]
+yunohost = ">= 12.0.0"
+helpers_version = "2.1"
+architectures = "all"
+multi_instance = false
+
+ldap = "not_relevant"
+sso = "not_relevant"
+
+disk = "100M"
+ram.build = "200M"
+ram.runtime = "150M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "all_users"
+
+    [install.anthropic_api_key]
+    ask.en = "Anthropic API key (for Dr. Abeille AI assistant)"
+    ask.fr = "Clé API Anthropic (pour l'assistant IA Dr. Abeille)"
+    help.en = "Get your API key at https://console.anthropic.com/. Leave empty to disable AI features."
+    help.fr = "Obtenez votre clé API sur https://console.anthropic.com/. Laissez vide pour désactiver les fonctionnalités IA."
+    type = "password"
+    optional = true
+    default = ""
+
+[resources]
+    [resources.sources.main]
+    # The sources will be the local archive built from the suivi-ruches repository
+    # For now, we use the GitHub repo as source
+    url = "https://github.com/TngBlt/suivi-ruches/archive/refs/heads/main.tar.gz"
+    sha256 = "PLACEHOLDER_WILL_BE_UPDATED_ON_RELEASE"
+    in_subdir = true
+    
+    autoupdate.strategy = "latest_github_commit"
+
+    [resources.system_user]
+    # Creates a system user named 'suivi_ruches' for the app
+    
+    [resources.install_dir]
+    # Install dir at /var/www/suivi_ruches (default)
+    
+    [resources.data_dir]
+    # Data dir at /home/yunohost.app/suivi_ruches (default)
+    
+    [resources.permissions]
+    main.url = "/"
+    
+    [resources.ports]
+    # Internal port for the Node.js server
+    main.default = 3000
+    
+    [resources.apt]
+    packages = "curl"
