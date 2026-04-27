@@ -58,7 +58,7 @@ ram.runtime = "150M"
     # The sources will be the local archive built from the suivi-ruches repository
     # For now, we use the GitHub repo as source
     url = "https://github.com/TngBlt/suivi-ruches/archive/refs/heads/main.tar.gz"
-    sha256 = "efcfc4f2ead4811d4198d52bcf611499ec7de9db3c45eb2ae529b7d08ea7869f"
+    sha256 = "efcfc4f2ead4811d4198d52bcf611499ec7de9db3c45eb2ae529b7d08ea7869fefcfc4f2ead4811d4198d52bcf611499ec7de9db3c45eb2ae529b7d08ea7869f"
     in_subdir = true
     
     autoupdate.strategy = "latest_github_commit"
