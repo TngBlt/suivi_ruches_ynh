@@ -37,8 +37,9 @@ ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 ynh_script_progression "Organizing app files..."
 
 if [ -d "$install_dir/src" ]; then
-    if [ -f "$install_dir/src/suivi-ruches-v1.4.0.html" ]; then
-        cp "$install_dir/src/suivi-ruches-v1.4.0.html" "$install_dir/src/index.html"
+    latest_html=$(ls -t "$install_dir/src/"suivi-ruches-v*.html 2>/dev/null | head -1)
+    if [ -n "$latest_html" ]; then
+        cp "$latest_html" "$install_dir/src/index.html"
     fi
     sed -i 's/const PORT = 3000;/const PORT = process.env.PORT || 3000;/' "$install_dir/src/server.js"
 fi

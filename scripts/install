@@ -39,8 +39,10 @@ ynh_script_progression "Organizing app files..."
 # Suivi Ruches has files in src/ subfolder
 # Create index.html from the versioned HTML file so express.static serves it
 if [ -d "$install_dir/src" ]; then
-    if [ -f "$install_dir/src/suivi-ruches-v1.4.0.html" ]; then
-        cp "$install_dir/src/suivi-ruches-v1.4.0.html" "$install_dir/src/index.html"
+    # Pick the most recent suivi-ruches-v*.html as index.html
+    latest_html=$(ls -t "$install_dir/src/"suivi-ruches-v*.html 2>/dev/null | head -1)
+    if [ -n "$latest_html" ]; then
+        cp "$latest_html" "$install_dir/src/index.html"
     fi
     
     # Patch server.js to use PORT environment variable instead of hardcoded 3000
